@@ -1,6 +1,6 @@
 NAME = pipex
 LIBFT = ./libft/libft.a
-SRC = pipex.c  pipex_u.c
+SRC = pipex.c  pipex_u.c free_split.c
 OBJ = $(SRC:.c=.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror

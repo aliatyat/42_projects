@@ -15,23 +15,21 @@
 void	execute_command(char *cmd, char **envp)
 
 {	
-	char	*path;
-	char	**cmds;
+	char			*path;
+	char			**cmds;
 
+	if (!cmd || *cmd == '\0')
+		return ;
 	cmds = ft_split(cmd, ' ');
-	if (!cmds)
-		perror("");
+	if (!cmds || !*cmds || *cmds[0] == '\0')
+		return (free_and_return(cmds));
 	path = find_path(envp, cmds);
 	if (!path)
-	{
-		ft_putstr_fd("./pipex: command not found: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd("\n", 2);
-		exit(EXIT_FAILURE);
-		return ;
-	}
+		return (handle_path_error(cmd, cmds));
 	execve(path, cmds, envp);
 	ft_putstr_fd("execve error\n", 2);
+	free(path);
+	free_split(cmds);
 	exit(EXIT_FAILURE);
 }
 
@@ -71,7 +69,7 @@ int	open_files(int argc, char **argv, int *fd_in, int *fd_out)
 		perror("");
 	}
 	*fd_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (*fd_out < 0)
+	if (*fd_out == -1)
 	{
 		ft_putstr_fd("File open error\n", 2);
 		return (EXIT_FAILURE);
@@ -91,12 +89,13 @@ void	launch_first_child(char *cmd, int fds[2], int pipe_fd[2], char **envp)
 	}
 	if (pid == 0)
 	{
-		printf("close(%d)\n", fds[2]);
-		close(fds[1]);
+		if (fds[1] != -1)
+			close(fds[1]);
 		close(pipe_fd[0]);
 		child_process(cmd, fds[0], pipe_fd[1], envp);
 	}
-	close(fds[0]);
+	if (fds[0] != -1)
+		close(fds[0]);
 }
 
 void	launch_second_child(char *cmd, int pipe_fd[2], int fd_out, char **envp)
@@ -111,7 +110,6 @@ void	launch_second_child(char *cmd, int pipe_fd[2], int fd_out, char **envp)
 	}
 	if (pid == 0)
 	{
-		printf("close(%d)\n", fd_out);
 		close(pipe_fd[1]);
 		child_process(cmd, pipe_fd[0], fd_out, envp);
 	}

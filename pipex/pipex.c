@@ -6,7 +6,7 @@
 /*   By: alalauty <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 19:18:24 by alalauty          #+#    #+#             */
-/*   Updated: 2024/11/22 19:25:36 by alalauty         ###   ########.fr       */
+/*   Updated: 2024/11/10 19:18:26 by alalauty         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	close_on_exit(int *fds, int fd_count)
 	i = 0;
 	while (i < fd_count)
 	{
-		printf("close(%d)\n", fds[i]);
 		if (fds[i] != -1)
 			close(fds[i]);
 		i++;
@@ -85,8 +84,11 @@ int	main(int argc, char **argv, char **envp)
 	int		fd_out;
 	int		pipe_fd[2];
 
-	if (argc < 5)
+	if (argc != 5)
+	{
+		ft_putstr_fd("Usage: ./pipex infile cmd1 cmd2 outfile\n", 2);
 		return (EXIT_FAILURE);
+	}
 	open_files(argc, argv, &fd_in, &fd_out);
 	if (pipe(pipe_fd) == -1)
 	{
@@ -99,8 +101,6 @@ int	main(int argc, char **argv, char **envp)
 	if (fd_out != -1)
 		launch_second_child(argv[3], pipe_fd, fd_out, envp);
 	close_on_exit((int []){fd_in, fd_out, pipe_fd[0], pipe_fd[1]}, 4);
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
 	wait(NULL);
 	wait(NULL);
 	return (0);

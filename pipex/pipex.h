@@ -19,6 +19,9 @@
 # include <sys/wait.h>
 # include "libft/libft.h"
 
+void	free_split(char **split);
+void	free_and_return(char **cmds);
+void	handle_path_error(char *cmd, char **cmds);
 void	execute_command(char *cmd, char **envp);
 void	child_process(char *cmd, int input_fd, int output_fd, char **envp);
 int		open_files(int argc, char **argv, int *fd_in, int *fd_out);

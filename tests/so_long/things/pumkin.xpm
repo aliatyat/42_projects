@@ -1,0 +1,28 @@
+/* XPM */
+static char * halloween_pumpkin[] = {
+/* width height num_colors chars_per_pixel */
+"16 16 4 1",
+/* colors */
+"  c black",
+". c orange",
+"X c yellow",
+"o c darkorange",
+/* pixels */
+"       ....       ",
+"     ..oooo..     ",
+"    .oooooooo.    ",
+"   .oooooooooo.   ",
+"  .ooXXooooXXoo.  ",
+"  .oX..oooo..Xo.  ",
+"  .o..oooooo..o.  ",
+"   .oooooooooo.   ",
+"    .oooooooo.    ",
+"     .oooooo.     ",
+"      ..XX..      ",
+"      .oXXo.      ",
+"     .o.  .o.     ",
+"    .o.    .o.    ",
+"    ..      ..    ",
+"                  "
+};
+
